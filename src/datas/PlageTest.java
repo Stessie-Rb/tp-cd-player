@@ -1,87 +1,110 @@
 package datas;
 
-/**
- * Classe qui représente et caractérise les plages d'un CD. Une plage comporte un titre et un ou plusieurs interprètes. 
- */
-public class Plage {
-	
-	private Duree laDuree;
-	private String leTitre;
-	private String lInterprete;
-	
-	//Constructeur
-	
-	/**Céation de la plage d'un morceau de musique
-	 * @param duree objet de type Duree qui représente la duréee de la plage
-	 * @param titre Le titre du morceau de musique
-	 * @param interprete Le ou les interprètes du morceau de musique
-	 */
-	public Plage(Duree duree, String titre, String interprete) {
-		this.laDuree = duree;
-		this.leTitre = titre;
-		this.lInterprete= interprete;
-	}
-	
-	
-	//Méthodes
-	
-	/**
-	 * Méthode d'accession à la durée de la plage
-	 * @return Retourne un objet de type Duree
-	 */
-	public Duree getLaDuree() {
-		return laDuree;
-	}
-	
-	/**
-	 * Méthode d'accession au titre de la plage
-	 * @return le titre de la plage
-	 */
-	public String getLeTitre() {
-		return leTitre;
-	}
-	
-	/**
-	 * Méthode d'accession à l'(ou les) interprètes
-	 * @return Retourne l'interprète de la plage
-	 */
-	public String getLInterprete() {
-		return lInterprete; 
-	}
-	
-	/**
-	 * Méthode d'accession qui renvoie une fiche descriptive complète de la plage sous la forme:
-	 * Description de la plage de musique:
-	 * <ul>
-	 * <li>Titre :</li>
-	 * <li>Interprètes(s) :</li>
-	 * <li>Durée : HHH:MM:SS
-	 * </ul>
-	 * @return la description de la plage sous forme de texte
-	 */
-	public String getFicheComplete() {
-		String ficheComplete= "";
-		String titre = this.getLeTitre();
-		String interprete= this.getLInterprete();
-		String duree= laDuree.enTexte('H');
+public class PlageTest {
+
+	public static void main(String[] args) {
+		//------------------Tests du constructeur-------------------------------------------------------------------------
+		System.out.println("==========================Test du constructeur===============================================");
+		testConstructeur();
 		
-		ficheComplete += "Description de la plage de musique \n" + "Titre : " + titre + "\n" + "Interprète : " + interprete + "\n" + "Duréee : " + duree;
+		//-----------------Tests des accesseurs---------------------------------------------------------------------------
+		System.out.println("==========================Test accesseur getLaDuree===============================================");
+		testGetLaDuree();
 		
-		return ficheComplete;
+		System.out.println("==========================Test accesseur getLeTitre===============================================");
+		testGetLeTitre();
+		
+		System.out.println("==========================Test accesseur getLInterprete===============================================");
+		testGetLInterprete();
+		
+		System.out.println("==========================Test accesseur getFicheComplete===============================================");
+		testGetFicheComplete();
+		
+		System.out.println("==========================Test accesseur toString===============================================");
+		testToString();
 	}
 	
-	/**
-	 * Méthode d'accession à un résumé de la plage suivant le modèle: titre - interprète - durée (SSS.MMM sec)
-	 * @return Résumé textuel sous forme de chaîne de caractère
-	 */
-	@Override
-	public String toString() {
-		String toString= "";
-		String titre= this.getLeTitre();
-		String interprete= this.getLInterprete();
-		String duree= this.laDuree.enTexte('H');
+	public static void testConstructeur() {
+		System.out.println("Test cas normal");
 		
-		toString += titre + " - " + interprete + " - " + "(" + duree + " sec)";
-		return toString;
+		Duree laDuree= new Duree(200);
+		Plage plage1 = new Plage(laDuree, "Plage 1", "Interprète 1");
+		
+		if(plage1.getLaDuree() == laDuree && plage1.getLeTitre() == "Plage 1" && plage1.getLInterprete() == "Interprète 1") 
+			System.out.println("Test réussi");
+		else System.out.println("Echec du test");
+		
+		System.out.println("Test cas d'erreur: création d'une plage avec durée négative.\nTest ok si affichage du message d'erreur");
+		
+		laDuree= new Duree(-200);
+		plage1= new Plage(laDuree, "Plage 1", "Interprète 1");	
 	}
+	
+	//Tests des accesseurs
+	
+	//Test getLaDuree
+	public static void testGetLaDuree() {
+		System.out.println("Test cas normal");
+	
+		Plage plage1 = new Plage(new Duree(7000), "Plage 1", "Interprète 1");
+		
+		if(plage1.getLaDuree() instanceof Duree) System.out.println("Test réussi");
+		else System.out.println("Echec du test");
+		
+		System.out.println("Test cas d'erreur, durée négative: Ok si le message d'erreur est affiché");
+		
+		plage1= new Plage(new Duree(-7000), "Plage 1", "Interprète 1");
+	}
+	
+	//Test getLeTitre
+	public static void testGetLeTitre() {
+		Plage plage1= new Plage(new Duree(0, 3, 0), "Titre 1", "Interprète 1");
+		
+		System.out.println("Test accesseur getLeTitre, cas normal");
+		if(plage1.getLeTitre() == "Titre 1") System.out.println("Test réussi");
+		else System.out.println("Echec du test");
+		
+		System.out.println("Test cas d'erreur: le titre n'est pas une chaîne de caractères");
+		boolean testErreur= plage1.getLeTitre() instanceof String;
+		if(testErreur) System.out.println("Test réussi");
+		else System.out.println("Echec du test");
+	}
+	
+	//Test getLInterprete
+	public static void testGetLInterprete() {
+		Plage plage1= new Plage(new Duree(0, 3, 0), "Titre 1", "Interprète 1");
+		
+		System.out.println("Test accesseur getLInterprete, cas normal");
+		if(plage1.getLInterprete() == "Interprète 1") System.out.println("Test réussi");
+		else System.out.println("Echec du test");
+		
+		System.out.println("Test cas d'erreur: l'interprète n'est pas une chaîne de caractères");
+		boolean testErreur= plage1.getLInterprete() instanceof String;
+		if(testErreur) System.out.println("Test réussi");
+		else System.out.println("Echec du test");
+	}
+	
+	//Test getFicheComplete
+	public static void testGetFicheComplete() {
+		Plage plage1= new Plage(new Duree(70000), "Titre", "Interprète");
+		
+		System.out.println("Test accesseur getFicheComplete, cas normal");
+		if(plage1.getFicheComplete() instanceof String) System.out.println("Test réussi");
+		else System.out.println("Echec du test");		
+	}
+	
+	//Test toString
+	public static void testToString() {
+		Plage plage1 = new Plage(new Duree(2000), "Titre 1", "Interprète 1");
+		
+		System.out.println("Test toString en cas normal");
+		if(plage1.toString().equals("Titre 1 - Interprète 1 - (2.0 sec)")) System.out.println("Test réussi");
+		else System.out.println("Echec du test");
+		
+		System.out.println("Test cas d'erreur: la valeur n'est pas une chaîne de caractères");
+		boolean testErreur= plage1.toString() instanceof String;
+		if(testErreur) System.out.println("Test réussi");
+		else System.out.println("Echec du test");
+	}
+	
 }
